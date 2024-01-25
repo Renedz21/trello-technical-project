@@ -1,6 +1,10 @@
+import AppRoutes from "./routers/routes"
+
 const App = () => {
   return (
-    <div>App</div>
+    <main className="h-screen w-full">
+      <AppRoutes />
+    </main>
   )
 }
 
