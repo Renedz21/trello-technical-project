@@ -1,30 +1,45 @@
-# React + TypeScript + Vite
+# Trello Organizer Web App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This web application is designed to organize personal projects using the Trello API as the backend and ReactJS as the frontend development framework.
 
-Currently, two official plugins are available:
+## Project Description
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The purpose of this application is to allow users to efficiently manage their projects using the functionality provided by Trello. The application enables listing all boards, displaying lists and cards associated with a selected board, creating new cards by specifying only the name, and dragging and dropping cards between lists.
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- List all available boards.
+- Show lists and cards associated with a selected board.
+- Create new cards by specifying only the name.
+- Drag and drop functionality to move cards between lists (optional).
 
-- Configure the top-level `parserOptions` property like this:
+## Technologies Used
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+- ReactJS
+- React Query for data fetching and caching.
+- Axios for making calls to the Trello API.
+- React Router for routing.
+- Tailwind CSS for styling.
+- Zustand for state management.
+- Shadcn for custom components.
+- React Beautiful DnD for drag and drop functionality (optional).
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## Trello API Setup
+
+To use the application, follow these steps:
+
+1. Sign up on [Trello](https://trello.com) for free.
+2. Get the API key and token by following the instructions at [https://trello.com/app-key](https://trello.com/app-key).
+3. Replace `[key]` and `[token]` in the API calls with your actual key and token values.
+
+## Installation and Usage
+
+1. Clone the repository: `git clone [repository-url]`
+2. Install dependencies: `pnpm install`
+3. Start the application: `pnpm run dev`
+
+## Project Structure
+
+- `src/components`: Contains reusable components.
+- `src/pages`: Contains page-specific components.
+- `src/utils`: Contains utilities and helper functions.
