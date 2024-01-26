@@ -17,6 +17,8 @@ import {
 import { Input } from "@/components/ui/input"
 import { useCreateCardInList } from "@/lib/react-query/queries"
 
+import { toast } from "sonner"
+
 const formSchema = z.object({
     name: z.string().min(1, {
         message: "Name is required"
@@ -27,7 +29,7 @@ const CreateCardForm = ({ listId }: { listId: string }) => {
 
     const { boardId } = useParams<{ boardId: string }>()
 
-    const { mutateAsync: createCard } =
+    const { mutateAsync: createCard, isPending } =
         useCreateCardInList(boardId as string);
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -38,18 +40,16 @@ const CreateCardForm = ({ listId }: { listId: string }) => {
     })
 
     const onSubmit = async (data: z.infer<typeof formSchema>) => {
-        //https://api.trello.com/1/cards?idList=5abbe4b7ddc1b351ef961414&key=APIKey&token=APIToken
         try {
-            const response = await createCard({
+            await createCard({
                 id: listId,
                 cardName: data.name
             })
 
-            console.log(response)
+            toast.success('Card created!')
         } catch (error) {
-            console.log(error)
+            toast.error('Error creating card!')
         }
-        console.log(data)
     }
 
     return (
@@ -67,6 +67,7 @@ const CreateCardForm = ({ listId }: { listId: string }) => {
                                 <Input
                                     type="text"
                                     placeholder="Enter a card name"
+                                    disabled={isPending}
                                     {...field}
                                 />
                             </FormControl>
@@ -80,6 +81,7 @@ const CreateCardForm = ({ listId }: { listId: string }) => {
                 <Button
                     type="submit"
                     className="w-full"
+                    disabled={isPending}
                 >
                     Create card
                 </Button>

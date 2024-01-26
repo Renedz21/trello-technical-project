@@ -10,8 +10,3 @@ export const instance = axios.create({
         token: trelloToken,
     }
 });
-
-// instance.interceptors.request.use((config) => {
-//     const token = config
-
-// });

@@ -31,6 +31,20 @@ export async function getOneBoard(id: string) {
     }
 }
 
+export async function createList(idBoard: string, listName: string) {
+    try {
+        const result = await instance.post(`/1/lists/`, {}, {
+            params: {
+                idBoard,
+                name: listName,
+            }
+        })
+        return result.data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 export async function createCard(id: string, cardName: string) {
     try {
         const result = await instance.post(`/1/cards/`, {}, {

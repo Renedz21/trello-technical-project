@@ -28,7 +28,7 @@ const BoardLists = ({ cards, list, index }: BoardListsProps) => {
                     {...provided.draggableProps}
                     ref={provided.innerRef}
                     key={list.id}
-                    className='w-72'
+                    className='w-72 h-fit flex flex-col justify-between'
                 >
                     <CardHeader
                         {...provided.dragHandleProps}
@@ -59,10 +59,10 @@ const BoardLists = ({ cards, list, index }: BoardListsProps) => {
                                 </div>
                             )}
                         </Droppable>
-
                     </CardContent>
                     <CardFooter>
                         <ButtonPopover
+                            className="w-full"
                             title="Add a card"
                         >
                             <CreateCardForm
@@ -72,7 +72,6 @@ const BoardLists = ({ cards, list, index }: BoardListsProps) => {
                     </CardFooter>
                 </Card>
             )}
-
         </Draggable>
 
     )

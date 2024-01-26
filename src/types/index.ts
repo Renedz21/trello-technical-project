@@ -46,6 +46,11 @@ export interface SwitcherView {
     enabled: boolean;
 }
 
+export interface IPostList {
+    idBoard: string
+    listName: string;
+}
+
 export interface IPostCard {
     id: string
     cardName: string;

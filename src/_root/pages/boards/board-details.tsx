@@ -6,6 +6,7 @@ import ButtonPopover from './_components/button-popover'
 import { List } from '@/types'
 import { DragDropContext, Droppable } from '@hello-pangea/dnd';
 import BoardLists from './_components/board-lists'
+import CreateListForm from './_components/create-list-form'
 
 function reorder<T>(list: T[], startIndex: number, endIndex: number) {
     const result = Array.from(list)
@@ -84,6 +85,7 @@ const BoardDetails = () => {
         >
             <BoardNavbar
                 name={data?.name as string}
+                data={data}
             />
             <DragDropContext
                 onDragEnd={onDragEnd}
@@ -111,7 +113,7 @@ const BoardDetails = () => {
                                 <ButtonPopover
                                     title="Add a list"
                                 >
-                                    <div></div>
+                                    <CreateListForm />
                                 </ButtonPopover>
                             </div>
                         )}

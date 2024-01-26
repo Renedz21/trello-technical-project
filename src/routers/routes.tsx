@@ -1,4 +1,4 @@
-import { BoardDetails, Boards, Home } from '@/_root/pages'
+import { BoardDetails, Boards, Favorites, Home } from '@/_root/pages'
 import RootLayout from '@/_root/root-layout'
 import { Routes, Route } from 'react-router-dom'
 
@@ -9,6 +9,7 @@ const AppRoutes = () => {
                 <Route index element={<Home />} />
                 <Route path='/boards' element={<Boards />} />
                 <Route path='/boards/:boardId' element={<BoardDetails />} />
+                <Route path='/favorites' element={<Favorites />} />
                 {/* <Route path="*" element={<h1>Not Found</h1>} /> */}
             </Route>
         </Routes>

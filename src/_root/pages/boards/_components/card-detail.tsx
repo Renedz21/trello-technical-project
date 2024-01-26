@@ -24,7 +24,7 @@ const CardDetail = ({ data }: ICardDetailProps) => {
                 }}
             >
                 <CardHeader>
-                    <CardTitle className="text-white">
+                    <CardTitle className="text-white text-sm text-center">
                         {data.name}
                     </CardTitle>
                 </CardHeader>

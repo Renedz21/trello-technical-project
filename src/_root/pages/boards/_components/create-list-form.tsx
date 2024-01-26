@@ -13,6 +13,10 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { useCreateList } from "@/lib/react-query/queries"
+import { useParams } from "react-router-dom"
+
+import { toast } from "sonner"
 
 const formSchema = z.object({
     name: z.string().min(1, {
@@ -22,6 +26,9 @@ const formSchema = z.object({
 
 const CreateListForm = () => {
 
+    const { boardId } = useParams<{ boardId: string | any }>()
+
+    const { mutateAsync: createList, isPending } = useCreateList(boardId)
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -29,8 +36,16 @@ const CreateListForm = () => {
         },
     })
 
-    const onSubmit = (data: z.infer<typeof formSchema>) => {
-        console.log(data)
+    const onSubmit = async (data: z.infer<typeof formSchema>) => {
+        try {
+            await createList({
+                idBoard: boardId,
+                listName: data.name
+            })
+            toast.success('List created!')
+        } catch (error) {
+            toast.error('Error creating list!')
+        }
     }
 
     return (
@@ -42,17 +57,18 @@ const CreateListForm = () => {
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>
-                                Board name
+                                List name
                             </FormLabel>
                             <FormControl>
                                 <Input
                                     type="text"
-                                    placeholder="Enter a board name"
+                                    placeholder="Enter a list name"
+                                    disabled={isPending}
                                     {...field}
                                 />
                             </FormControl>
                             <FormDescription>
-                                👋 It&apos;s necessary to enter a name for your board.
+                                👋 It&apos;s necessary to enter a name for your list.
                             </FormDescription>
                             <FormMessage />
                         </FormItem>
@@ -61,8 +77,9 @@ const CreateListForm = () => {
                 <Button
                     type="submit"
                     className="w-full"
+                    disabled={isPending}
                 >
-                    Create board
+                    Create list
                 </Button>
             </form>
         </Form>
