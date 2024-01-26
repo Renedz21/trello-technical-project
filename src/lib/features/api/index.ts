@@ -25,13 +25,13 @@ export async function getOneBoard(id: string) {
                 key: publicKey,
                 token: trelloToken,
                 fields: 'name,id,prefs',
-                list_fields: 'name,id,color,idBoard',
                 lists: 'open',
+                list_fields: 'name,id,color,idBoard',
+                cards: 'open',
+                card_fields: 'name,id,idList',
             }
         })
-
         return result.data
-
     } catch (error) {
         console.log(error)
     }

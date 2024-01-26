@@ -3,6 +3,13 @@ export interface IMainProps {
     name: string;
     prefs: Prefs;
     lists: List[];
+    cards: CardProps[];
+}
+
+export interface CardProps {
+    id: string;
+    name: string;
+    idList: string
 }
 
 export interface List {

@@ -20,7 +20,7 @@ const Boards = () => {
     }
 
     return (
-        <section className="w-full h-full">
+        <section className="w-full h-full p-8">
             <div className="flex items-center gap-4">
                 <div className="bg bg-indigo-300 rounded-md p-2">
                     <Table2 size={22} className="text-indigo-600" />
