@@ -15,7 +15,6 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { instance } from "@/utils"
 import { useCreateCardInList } from "@/lib/react-query/queries"
 
 const formSchema = z.object({
@@ -28,7 +27,7 @@ const CreateCardForm = ({ listId }: { listId: string }) => {
 
     const { boardId } = useParams<{ boardId: string }>()
 
-    const { mutateAsync: createCard, isLoading: isLoadingCreate } =
+    const { mutateAsync: createCard } =
         useCreateCardInList(boardId as string);
 
     const form = useForm<z.infer<typeof formSchema>>({

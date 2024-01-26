@@ -32,7 +32,8 @@ const BoardDetails = () => {
         if (destination.droppableId === source.droppableId && destination.index === source.index) return;
 
         if (type === 'list') {
-            const lists = reorder(
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            reorder(
                 data.lists,
                 source.index,
                 destination.index
@@ -40,7 +41,7 @@ const BoardDetails = () => {
         }
 
         if (type === 'card') {
-            let newOrderedData = [...data.cards]
+            const newOrderedData = [...data.cards]
 
             const sourceList = newOrderedData.find((card) => card.id === source.droppableId)
             const destinationList = newOrderedData.find((card) => card.id === destination.droppableId)
@@ -62,7 +63,7 @@ const BoardDetails = () => {
                     destination.index
                 )
 
-                reorderedCards.forEach((card, index) => {
+                reorderedCards.forEach((card: any, index) => {
                     card.order = index
                 })
 
