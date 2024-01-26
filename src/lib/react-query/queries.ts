@@ -1,5 +1,6 @@
-import { useQuery } from '@tanstack/react-query';
-import { getAllBoards, getOneBoard } from '../features/api';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { createCard, getAllBoards, getOneBoard } from '../features/api';
+import { IPostCard } from '@/types';
 
 export const useGetBoards = () => {
     return useQuery({
@@ -14,3 +15,15 @@ export const useGetOneBoard = (id: string) => {
         queryFn: () => getOneBoard(id),
     })
 }
+
+export const useCreateCardInList = (boardId: string) => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (data: IPostCard) => createCard(data.id, data.cardName),
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ['board', boardId],
+            });
+        },
+    });
+};

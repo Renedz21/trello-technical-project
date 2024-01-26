@@ -45,3 +45,8 @@ export interface SwitcherView {
     viewType: string;
     enabled: boolean;
 }
+
+export interface IPostCard {
+    id: string
+    cardName: string;
+}

@@ -3,23 +3,20 @@ import { useParams } from 'react-router-dom'
 import BoardNavbar from "./_components/board-navbar"
 import { useGetOneBoard } from '@/lib/react-query/queries'
 import ButtonPopover from './_components/button-popover'
-import { CardProps, List } from '@/types'
-import { Button } from '@/components/ui/button'
-import { Plus } from 'lucide-react'
-import {
-    Card,
-    CardContent,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card"
+import { List } from '@/types'
+import { DragDropContext, Droppable } from '@hello-pangea/dnd';
+import BoardLists from './_components/board-lists'
 
-
+function reorder<T>(list: T[], startIndex: number, endIndex: number) {
+    const result = Array.from(list)
+    const [removed] = result.splice(startIndex, 1)
+    result.splice(endIndex, 0, removed)
+    return result
+}
 
 const BoardDetails = () => {
 
     const { boardId } = useParams<{ boardId: string }>()
-
 
     const { isLoading, data, isError } = useGetOneBoard(boardId as string)
 
@@ -27,7 +24,53 @@ const BoardDetails = () => {
 
     if (isError) return <div>Error</div>
 
-    console.log(data)
+    const onDragEnd = (result: any) => {
+        const { destination, source, type } = result;
+
+        if (!destination) return;
+
+        if (destination.droppableId === source.droppableId && destination.index === source.index) return;
+
+        if (type === 'list') {
+            const lists = reorder(
+                data.lists,
+                source.index,
+                destination.index
+            ).map((item: any, index) => ({ ...item, order: index }))
+        }
+
+        if (type === 'card') {
+            let newOrderedData = [...data.cards]
+
+            const sourceList = newOrderedData.find((card) => card.id === source.droppableId)
+            const destinationList = newOrderedData.find((card) => card.id === destination.droppableId)
+
+            if (!sourceList || !destinationList) return;
+
+            if (!sourceList.cards) {
+                sourceList.cards = []
+            }
+
+            if (!destinationList.cards) {
+                destinationList.cards = []
+            }
+
+            if (sourceList.droppableId === destination.droppableId) {
+                const reorderedCards = reorder(
+                    sourceList.cards,
+                    source.index,
+                    destination.index
+                )
+
+                reorderedCards.forEach((card, index) => {
+                    card.order = index
+                })
+
+                sourceList.cards = reorderedCards
+            }
+
+        }
+    }
 
     return (
         <section
@@ -41,50 +84,39 @@ const BoardDetails = () => {
             <BoardNavbar
                 name={data?.name as string}
             />
-
-            <div className='px-6 py-4'>
-                <div className='w-full flex gap-4 snap-x snap-mandatory overflow-x-scroll overflow-y-hidden md:overflow-visible'>
-                    {data.lists.map((list: List) => (
-                        <Card
-                            key={list.id}
-                            className='w-72'
-                        >
-                            <CardHeader>
-                                <CardTitle>{list.name}</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <div className='flex flex-col gap-2'>
-                                    {
-                                        data.cards.filter((card: CardProps) => card.idList === list.id)
-                                            .map((card: CardProps) => (
-                                                <div
-                                                    key={card.id}
-                                                    className='bg-white rounded-md p-2 border shadow-md'
-                                                >
-                                                    <span className='text-sm'>{card.name}</span>
-                                                </div>
-                                            ))
-                                    }
-                                </div>
-                            </CardContent>
-                            <CardFooter>
-                                <Button
-                                    variant='secondary'
-                                    className='flex items-center gap-4 w-full'
-                                >
-                                    <Plus className="w-5 h-5" />
-                                    Add a card
-                                </Button>
-                            </CardFooter>
-                        </Card>
-                    ))}
-                    <ButtonPopover
-                        title="Add a list"
+            <DragDropContext
+                onDragEnd={onDragEnd}
+            >
+                <div className='px-6 py-4'>
+                    <Droppable
+                        droppableId='board-lists'
+                        type='list'
+                        direction='horizontal'
                     >
-                        <div></div>
-                    </ButtonPopover>
+                        {(provided) => (
+                            <div
+                                {...provided.droppableProps}
+                                ref={provided.innerRef}
+                                className='w-full flex gap-4 snap-x snap-mandatory overflow-x-scroll overflow-y-hidden md:overflow-visible'>
+                                {data.lists.map((list: List, index: number) => (
+                                    <BoardLists
+                                        key={list.id}
+                                        index={index}
+                                        cards={data.cards}
+                                        list={list}
+                                    />
+                                ))}
+                                {provided.placeholder}
+                                <ButtonPopover
+                                    title="Add a list"
+                                >
+                                    <div></div>
+                                </ButtonPopover>
+                            </div>
+                        )}
+                    </Droppable>
                 </div>
-            </div>
+            </DragDropContext>
         </section>
     )
 }

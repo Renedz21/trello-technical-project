@@ -1,3 +1,5 @@
+import { useParams } from "react-router-dom"
+
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
@@ -13,6 +15,8 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { instance } from "@/utils"
+import { useCreateCardInList } from "@/lib/react-query/queries"
 
 const formSchema = z.object({
     name: z.string().min(1, {
@@ -20,7 +24,12 @@ const formSchema = z.object({
     }),
 })
 
-const CreateCardForm = () => {
+const CreateCardForm = ({ listId }: { listId: string }) => {
+
+    const { boardId } = useParams<{ boardId: string }>()
+
+    const { mutateAsync: createCard, isLoading: isLoadingCreate } =
+        useCreateCardInList(boardId as string);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -29,7 +38,18 @@ const CreateCardForm = () => {
         },
     })
 
-    const onSubmit = (data: z.infer<typeof formSchema>) => {
+    const onSubmit = async (data: z.infer<typeof formSchema>) => {
+        //https://api.trello.com/1/cards?idList=5abbe4b7ddc1b351ef961414&key=APIKey&token=APIToken
+        try {
+            const response = await createCard({
+                id: listId,
+                cardName: data.name
+            })
+
+            console.log(response)
+        } catch (error) {
+            console.log(error)
+        }
         console.log(data)
     }
 
@@ -42,17 +62,17 @@ const CreateCardForm = () => {
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>
-                                Board name
+                                Card name
                             </FormLabel>
                             <FormControl>
                                 <Input
                                     type="text"
-                                    placeholder="Enter a board name"
+                                    placeholder="Enter a card name"
                                     {...field}
                                 />
                             </FormControl>
                             <FormDescription>
-                                👋 It&apos;s necessary to enter a name for your board.
+                                👋 It&apos;s necessary to enter a name for your card.
                             </FormDescription>
                             <FormMessage />
                         </FormItem>
@@ -62,7 +82,7 @@ const CreateCardForm = () => {
                     type="submit"
                     className="w-full"
                 >
-                    Create board
+                    Create card
                 </Button>
             </form>
         </Form>
