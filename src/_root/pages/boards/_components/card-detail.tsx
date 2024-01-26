@@ -3,7 +3,9 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
+import { useFavoriteStore } from "@/store"
 import { IMainProps } from "@/types"
+import { Star } from "lucide-react"
 import { Link } from "react-router-dom"
 
 type ICardDetailProps = {
@@ -11,6 +13,9 @@ type ICardDetailProps = {
 }
 
 const CardDetail = ({ data }: ICardDetailProps) => {
+
+    const { favorites } = useFavoriteStore()
+
     return (
         <Link
             to={`/boards/${data.id}`}
@@ -24,8 +29,11 @@ const CardDetail = ({ data }: ICardDetailProps) => {
                 }}
             >
                 <CardHeader>
-                    <CardTitle className="text-white text-sm text-center">
+                    <CardTitle className="text-white text-sm text-center flex items-center justify-center gap-2">
                         {data.name}
+                        {favorites.includes(data) ? (
+                            <Star className="w-5 h-5 text-yellow-500" />
+                        ) : null}
                     </CardTitle>
                 </CardHeader>
             </Card>
